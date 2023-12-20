@@ -20,5 +20,5 @@ export const getVoiceAudioStream = (textToSay: string, callback: (response: Resp
     clyd: "2EiwWnXFnvU5JabPnv8n",
   };
 
-  fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voices.gigi}/stream`, options).then(callback);
+  fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voices.clyd}/stream`, options).then(callback);
 };
