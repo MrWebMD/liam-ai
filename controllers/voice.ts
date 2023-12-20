@@ -2,7 +2,10 @@ import { Request, Response } from "express-serve-static-core";
 import { logger } from "../utils/logger";
 import { personLookup } from "../apiHelpers/endato";
 import { getAiResponse } from "../apiHelpers/openai";
+
 import Twilio from "twilio";
+
+const twilioClient = Twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
 export const voiceController = async (req: Request, res: Response) => {
   const requestBody = req.body as TwilioVoiceWebhookBody;
@@ -82,4 +85,13 @@ export const voiceController = async (req: Request, res: Response) => {
 
   res.set("Content-Type", "text/xml");
   res.send(vres.toString());
+
+  logger.info(`Recording Call - ${req.body["Caller"]}`);
+
+  setTimeout(() => {
+    twilioClient
+      .calls(req.body["CallSid"])
+      .recordings.create({ recordingTrack: "dual" })
+      .then((recording) => logger.info(`Recording Started - ${req.body["caller"]} SID:${recording.sid}`));
+  }, 1000);
 };

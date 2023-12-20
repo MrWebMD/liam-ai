@@ -5,10 +5,6 @@ import stream from "stream";
 import { logger } from "../../utils/logger";
 import { getVoiceAudioStream } from "../elevenLabs";
 
-const Twilio = require("twilio");
-
-const twilioClient = Twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
-
 function mulawEncoder(chunk: Buffer | string, callback: (convertedChunk: Buffer) => void) {
   // https://stackoverflow.com/questions/45751202/how-can-i-play-an-audio-file-while-converting-it-with-ffmpeg-in-node-js
 
@@ -76,7 +72,7 @@ const handleStartEvent = (wss: WebSocketServer, ws: WebSocket, req: IncomingMess
         });
 
         sendMediaChunk(convertedChunk);
-        logger.info("Sending final chunks");
+        logger.info(`Sending final ${chunkBuffer.length} chunks`);
         chunkBuffer = [];
       }
       logger.info("Stream ending mark has been set");
@@ -84,12 +80,11 @@ const handleStartEvent = (wss: WebSocketServer, ws: WebSocket, req: IncomingMess
 
     response.body.on("data", (chunk) => {
       chunkIndex++;
-      logger.info("New chunk " + chunkIndex);
-
       chunkBuffer.push(chunk);
 
       if (chunkIndex % 60 != 0) return;
 
+      console.log(`Sending ${chunkBuffer.length} new chunks`);
       mulawEncoder(Buffer.concat(chunkBuffer), (convertedChunk) => {
         sendMediaChunk(convertedChunk);
       });
@@ -100,15 +95,6 @@ const handleStartEvent = (wss: WebSocketServer, ws: WebSocket, req: IncomingMess
 
 const handleWebSocketConnection = (wss: WebSocketServer, ws: WebSocket, req: IncomingMessage) => {
   logger.info("New Connection");
-
-  // logger.info(`Recording Call - ${request.body["Caller"]}`);
-
-  // setTimeout(() => {
-  //   twilioClient
-  //     .calls(req.body["CallSid"])
-  //     .recordings.create({ recordingTrack: "dual" })
-  //     .then((recording) => logger.info(`Recording Started - ${request.body["caller"]} SID:${recording.sid}`));
-  // }, 1000);
 
   ws.on("message", async (message) => {
     const msg = JSON.parse(message.toString());
