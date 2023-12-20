@@ -1,0 +1,10 @@
+{
+  "ts-node": { "files": true },
+  "files": ["index.ts", "index.d.ts"],
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "target": "ES2020",
+    "esModuleInterop": true
+  }
+}
