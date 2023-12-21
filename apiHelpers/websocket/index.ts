@@ -75,12 +75,20 @@ const handleStartEvent = (wss: WebSocketServer, ws: WebSocket, req: IncomingMess
 
     let chunkIndex = 0;
 
-    response.body.on("end", async () => {
-      chunkIndex++;
-      convertAndSendChunk(chunkBuffer, chunkIndex);
-    });
-
     response.body.on("data", (chunk) => {
+      /**
+       * When stream mode is disabled, all chunks will be collected until the stream ends,
+       * then sent together.
+       */
+      if (process.env.STREAM_MODE == "false") {
+        chunkBuffer.push(chunk);
+        return;
+      }
+
+      /**
+       * When stream mode is enabled, chunks are sent 60 at a time until the stream ends.
+       */
+
       chunkBuffer.push(chunk);
 
       if (chunkBuffer.length < 60) return;
@@ -92,6 +100,11 @@ const handleStartEvent = (wss: WebSocketServer, ws: WebSocket, req: IncomingMess
       convertAndSendChunk(chunkBuffer, chunkIndex);
 
       chunkBuffer = [];
+    });
+
+    response.body.on("end", async () => {
+      chunkIndex++;
+      convertAndSendChunk(chunkBuffer, chunkIndex);
     });
   });
 };
