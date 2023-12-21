@@ -72,7 +72,7 @@ export const voiceController = async (req: Request, res: Response) => {
    */
   const vres = new Twilio.twiml.VoiceResponse();
 
-  if (process.env.VOICE_MODE!) {
+  if (process.env.VOICE_MODE == "true") {
     const start = vres.connect();
     const stream = start.stream({
       url: `wss://${req.headers.host}/`,
