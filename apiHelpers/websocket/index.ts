@@ -6,7 +6,7 @@ import { logger } from "../../utils/logger";
 import { getVoiceAudioStream } from "../elevenLabs";
 
 function mulawEncoder(chunk: Buffer | string, callback: (convertedChunk: Buffer) => void) {
-  // https://stackoverflow.com/questions/45751202/how-can-i-play-an-audio-file-while-converting-it-with-ffmpeg-in-node-js
+  const convertedBufferStream: Buffer[] = [];
 
   const bufferStream = new stream.Readable({
     read() {
@@ -17,25 +17,25 @@ function mulawEncoder(chunk: Buffer | string, callback: (convertedChunk: Buffer)
   ffmpeg({
     source: bufferStream,
   })
-    // .inputFormat("wav")
     .audioFrequency(8000)
-    // .audioCodec("pcm_mulaw")
     .toFormat("mulaw")
     .on("error", (err) => {
       console.error("FFmpeg error:", err.message);
     })
     .pipe()
-    .on("data", callback);
+    .on("data", (convertedChunk) => {
+      convertedBufferStream.push(convertedChunk);
+    })
+    .on("end", () => {
+      callback(Buffer.concat(convertedBufferStream));
+    });
 }
 
 const handleStartEvent = (wss: WebSocketServer, ws: WebSocket, req: IncomingMessage, msg: any) => {
-  logger.info("Start");
-  // logger.info(msg);
-
   const { aiResponseText } = msg.start.customParameters;
   const { callSid, streamSid } = msg.start;
 
-  function sendMediaChunk(convertedChunk: Buffer | string) {
+  function sendMediaChunk(convertedChunk: Buffer | string, chunkIndex?: number) {
     /**
      * The final audio chunk must be transparted while base64 encoded.
      */
@@ -44,19 +44,31 @@ const handleStartEvent = (wss: WebSocketServer, ws: WebSocket, req: IncomingMess
     } else {
       convertedChunk = convertedChunk.toString("base64");
     }
+    console.log(chunkIndex);
 
     ws.send(
       JSON.stringify({
         event: "media",
         streamSid,
+        sequenceNumber: "1",
         media: {
+          track: "outbound",
+          chunk: chunkIndex + "",
           payload: convertedChunk,
         },
       })
     );
   }
 
+  function convertAndSendChunk(chunkBuffer, chunkIndex) {
+    mulawEncoder(Buffer.concat(chunkBuffer), (convertedChunk) => {
+      sendMediaChunk(convertedChunk, chunkIndex);
+    });
+  }
+
   getVoiceAudioStream(aiResponseText, (response) => {
+    logger.info("Waiting on first chunk from audio stream");
+
     if (!response.body) throw new Error("Invalid response body");
 
     let chunkBuffer = [];
@@ -64,30 +76,21 @@ const handleStartEvent = (wss: WebSocketServer, ws: WebSocket, req: IncomingMess
     let chunkIndex = 0;
 
     response.body.on("end", async () => {
-      if (chunkBuffer.length > 0) {
-        let convertedChunk: Buffer = await new Promise((resolve) => {
-          mulawEncoder(Buffer.concat(chunkBuffer), (convertedChunk) => {
-            resolve(convertedChunk);
-          });
-        });
-
-        sendMediaChunk(convertedChunk);
-        logger.info(`Sending final ${chunkBuffer.length} chunks`);
-        chunkBuffer = [];
-      }
-      logger.info("Stream ending mark has been set");
+      chunkIndex++;
+      convertAndSendChunk(chunkBuffer, chunkIndex);
     });
 
     response.body.on("data", (chunk) => {
-      chunkIndex++;
       chunkBuffer.push(chunk);
 
-      if (chunkIndex % 60 != 0) return;
+      if (chunkBuffer.length < 60) return;
 
-      console.log(`Sending ${chunkBuffer.length} new chunks`);
-      mulawEncoder(Buffer.concat(chunkBuffer), (convertedChunk) => {
-        sendMediaChunk(convertedChunk);
-      });
+      chunkIndex++;
+
+      logger.info(`Sending ${chunkBuffer.length} new chunks`);
+
+      convertAndSendChunk(chunkBuffer, chunkIndex);
+
       chunkBuffer = [];
     });
   });
@@ -98,7 +101,7 @@ const handleWebSocketConnection = (wss: WebSocketServer, ws: WebSocket, req: Inc
 
   setTimeout(() => {
     ws.close();
-  }, 1000 * 50);
+  }, 1000 * 60);
 
   ws.on("message", async (message) => {
     const msg = JSON.parse(message.toString());

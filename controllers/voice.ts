@@ -91,12 +91,13 @@ export const voiceController = async (req: Request, res: Response) => {
   res.set("Content-Type", "text/xml");
   res.send(vres.toString());
 
-  logger.info(`Recording Call - ${req.body["Caller"]}`);
-
-  setTimeout(() => {
-    twilioClient
-      .calls(req.body["CallSid"])
-      .recordings.create({ recordingTrack: "dual" })
-      .then((recording) => logger.info(`Recording Started - ${req.body["caller"]} SID:${recording.sid}`));
-  }, 1000);
+  if (process.env.RECORD == "true") {
+    logger.info(`Recording Call - ${req.body["Caller"]}`);
+    setTimeout(() => {
+      twilioClient
+        .calls(req.body["CallSid"])
+        .recordings.create({ recordingTrack: "dual" })
+        .then((recording) => logger.info(`Recording Started - ${req.body["caller"]} SID:${recording.sid}`));
+    }, 1000);
+  }
 };
