@@ -8,7 +8,7 @@ export const getVoiceAudioStream = (textToSay: string, callback: (response: Resp
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      model_id: "eleven_multilingual_v2",
+      model_id: process.env.ELEVEN_MODEL!,
       text: textToSay,
       optimize_streaming_latency: 3,
       voice_settings: { stability: 1, similarity_boost: 1 },
