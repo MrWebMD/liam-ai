@@ -96,12 +96,12 @@ const handleStartEvent = (wss: WebSocketServer, ws: WebSocket, req: IncomingMess
 const handleWebSocketConnection = (wss: WebSocketServer, ws: WebSocket, req: IncomingMessage) => {
   logger.info("New Connection");
 
+  setTimeout(() => {
+    ws.close();
+  }, 1000 * 50);
+
   ws.on("message", async (message) => {
     const msg = JSON.parse(message.toString());
-
-    setTimeout(() => {
-      ws.close();
-    }, 1000 * 50);
 
     switch (msg.event) {
       case "mark":
