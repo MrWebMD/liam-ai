@@ -16,9 +16,21 @@ import handleWebSocketConnection from "./apiHelpers/websocket";
 
 const app = express();
 
+app.set("view engine", "ejs");
+
+app.set("views", path.join(__dirname, "views"));
+
+app.disable("view cache");
+
 app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(__dirname, "public")));
+
+app.get("/", async (req, res) => {
+  res.render("pages/index", {
+    ga4code: process.env.GA4_TRACKING_CODE!,
+  });
+});
 
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });

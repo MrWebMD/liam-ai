@@ -9,7 +9,7 @@ const openai = new OpenAI({
 
 export const getAiResponse = (aiprompt: string, userPrompt: string) => {
   return openai.chat.completions.create({
-    model: "gpt-3.5-turbo",
+    model: process.env.OPENAI_MODEL,
     messages: [
       {
         role: "system",
