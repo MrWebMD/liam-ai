@@ -44,7 +44,10 @@ export const voiceController = async (req: Request, res: Response) => {
     age: ${person.age},
     date of birth: ${person.dob},
     address history: 
-    ${person.addresses.map((a) => a.fullAddress).join("\n,")}
+    ${person.addresses
+      .map((a) => a.fullAddress)
+      .join("\n,")
+      .replace(/[0-9]{5}-[0-9]{4}|[0-9]{5}/g, "")}
     relatives: ${person.relativesSummary
       ?.slice(0, 4)
       .map((r) => r.firstName + " " + r.lastName)
