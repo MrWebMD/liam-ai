@@ -6,7 +6,7 @@ interface TwilioVoiceWebhookBody {
   AccountSid: string;
   ApiVersion: string;
   CallSid: string;
-  CallStatus: string;
+  CallStatus: "ringing" | "in-progress";
   CallToken: string;
   Called: string;
   CalledCity: string;
@@ -19,6 +19,7 @@ interface TwilioVoiceWebhookBody {
   CallerState: string;
   CallerZip: string;
   Direction: string;
+  SpeechResult?: string;
   From: string;
   FromCity: string;
   FromCountry: string;

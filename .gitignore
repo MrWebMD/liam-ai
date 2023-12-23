@@ -9,3 +9,5 @@ call-log.log
 yarn-error.log
 voices.json
 eleven-labs-voices.md
+ignore
+public/voice-responses/*

@@ -72,6 +72,7 @@ PORT=1337
 VOICE_MODE=false
 RECORD=false
 STREAM_MODE=false
+MAX_CALL_DURATION_SEC=180
 ```
 
 ## Endato (Free tier provides 100 lookups per month)

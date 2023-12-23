@@ -1,6 +1,6 @@
 import fetch, { Response } from "node-fetch";
 
-export const getVoiceAudioStream = (textToSay: string, callback: (response: Response) => void) => {
+export const getVoiceAudioStream = (textToSay: string) => {
   const options = {
     method: "POST",
     headers: {
@@ -15,5 +15,5 @@ export const getVoiceAudioStream = (textToSay: string, callback: (response: Resp
     }),
   };
 
-  fetch(`https://api.elevenlabs.io/v1/text-to-speech/${process.env.ELEVEN_VOICE_ID!}/stream`, options).then(callback);
+  return fetch(`https://api.elevenlabs.io/v1/text-to-speech/${process.env.ELEVEN_VOICE_ID!}/stream`, options);
 };
