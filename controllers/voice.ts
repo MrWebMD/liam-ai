@@ -128,7 +128,13 @@ export const voiceController = async (req: Request, res: Response) => {
 
   let fileName = uuidv4() + ".mp3";
 
-  fs.writeFileSync(path.join(__dirname, "../public/voice-responses", fileName), fileContents);
+  let responsesDir = path.join(__dirname, "../public/voice-responses");
+
+  if (!fs.existsSync(responsesDir)) {
+    fs.mkdirSync(responsesDir);
+  }
+
+  fs.writeFileSync(path.join(responsesDir, fileName), fileContents);
   const vres = new Twilio.twiml.VoiceResponse();
 
   vres.play(`https://${req.headers["host"]}/voice-responses/${fileName}`);
