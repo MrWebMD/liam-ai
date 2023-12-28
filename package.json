@@ -6,7 +6,8 @@
   "author": "https://github.com/MrWebMD",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon index"
+    "dev": "nodemon index",
+    "start": "ts-node index"
   },
   "dependencies": {
     "@types/ejs": "^3.1.5",
