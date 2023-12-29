@@ -19,20 +19,16 @@
       gtag("config", "<%= ga4code %>");
     </script>
     <style>
-      @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,700;1,400&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;700&display=swap");
 
-      :root {
-        --green: rgb(75, 162, 75);
-      }
       body {
-        font-family: "Poppins", sans-serif;
+        font-family: "Roboto", sans-serif;
         padding: 0;
         margin: 0;
-        background-color: black;
       }
 
       .gradientAnimation {
-        background: linear-gradient(270deg, #00ca96, #9156fd);
+        background: linear-gradient(270deg, #00bb0c, #178a00);
         background-size: 400% 400%;
 
         -webkit-animation: AnimationName 6s ease infinite;
@@ -90,43 +86,44 @@
         width: 100%;
       }
       .hero {
-        width: 100vw;
+        max-width: 100vw;
         min-height: 100vh;
+        display: flex;
+        overflow: hidden;
+      }
+      .hero__desc {
+        font-size: 25px;
+      }
+      .hero__card {
+        width: 40vw;
+        min-width: 400px;
+        padding: 20px;
         display: flex;
         flex-direction: column;
         justify-content: center;
-        align-items: center;
-        position: relative;
+      }
+      .hero__title {
+        font-size: 50px;
+        margin: 0px;
+        font-style: normal;
+      }
+      a {
+        text-decoration: none;
       }
       .hero__bg {
-        /* background-image: url(scratched-bg.jpg); */
-        /* background-attachment: fixed; */
-        /* background-position: center; */
-        /* background-size: cover; */
-        width: 100%;
+        width: 100vw;
+        max-width: 100%;
         height: 100%;
         position: absolute;
-        left: 0;
+        right: 0;
         top: 0;
         z-index: -1;
-        filter: brightness(0.7);
+        filter: opacity(0.3);
       }
       .hero__img {
         max-width: 300px;
       }
-      .hero__card {
-        max-width: 300px;
-        text-align: center;
-        color: white;
-        /* background-color: #302f2f; */
-        padding: 20px;
-        border-radius: 5px;
-        border: 1px solid var(--green);
-        /* box-shadow: 0px 10px 30px rgba(0, 0, 0, 1); */
-      }
-      .author {
-        color: white;
-      }
+
       .githubLink {
         background-image: url("github-icon.svg");
         background-position: center;
@@ -144,16 +141,17 @@
         width: 100%;
         max-width: 300px;
         font-family: "Poppins", sans-serif;
-        font-size: 20px;
+        font-size: 30px;
         border: 0px;
         padding: 5px 0px;
-        margin: 10px 0px;
+        margin: 10px 0;
         cursor: pointer;
         display: block;
         color: white;
         text-decoration: none;
         box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.1);
-        /* border-radius: 5px; */
+        text-align: center;
+        border-radius: 4px;
       }
       .btn--brightOnHover {
         transition: filter 0.2s ease-in-out 0s;
@@ -165,20 +163,37 @@
         background-color: var(--green);
       }
 
-      @media screen and (max-width: 500px) {
+      @media screen and (max-width: 600px) {
         .hero__card {
           padding: 0;
           border: 0px;
           min-height: 60vh;
         }
-        .hero__title {
-          font-size: 50px;
+        .hero {
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          position: relative;
         }
+
         .hero__desc {
           font-size: 19px;
         }
+        .hero__bg {
+          left: 0;
+        }
         .btn {
           font-size: 25px;
+          margin: 10px auto;
+        }
+        .hero__card {
+          max-width: unset;
+          min-width: unset;
+          width: unset;
+          text-align: center;
+          background-color: unset;
+          padding: 20px;
+          border-radius: 5px;
         }
       }
     </style>
@@ -187,26 +202,26 @@
     <header class="hero">
       <div class="hero__bg"></div>
       <div class="hero__card">
-        <h1 class="hero__title">LiamAI</h1>
-        <!-- <img class="hero__img" src="liam-banner.jpg" /> -->
-        <p class="hero__desc">Call an artificial intelligence Liam Neeson and be threatened for entertainment purposes. No threats given are actually real, so no worries. All calls are recorded.</p>
+        <h1 class="hero__title">
+          <span style="color: #03a24d">LiamAI</span> powered by
+          <br />
+          <span class="typer" id="main" data-words="OpenAI, Twilio, ElevenLabs, Endato" data-delay="100" data-deleteDelay="2500"></span>
+          <span class="cursor" data-owner="main"></span>
+        </h1>
+        <p class="hero__desc">Experience the Thrill: Let AI Liam Neeson's Harmless Threats Entertain You! Calls are Recorded.</p>
         <a href="tel:3616872721" class="btn btn--green btn--brightOnHover gradientAnimation">Call</a>
-        <small class="hero_disclaimer">By calling you are consenting to being recorded.</small>
+        <small class="hero_disclaimer"><strong>By calling you are consenting to being recorded.</strong></small>
 
         <br />
         <a class="author" href="https://github.com/MrWebMD/liam-ai">Made By MrWebMD</a>
       </div>
     </header>
     <a href="https://github.com/MrWebMD/liam-ai" class="githubLink"></a>
-    <!-- <script>
-      setTimeout(() => {
-        window.location.reload();
-      }, 2000);
-    </script> -->
+    <script async src="https://unpkg.com/typer-dot-js@0.1.0/typer.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.dots.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.rings.min.js"></script>
     <script>
-      VANTA.DOTS({
+      VANTA.RINGS({
         el: ".hero__bg",
         mouseControls: true,
         touchControls: true,
@@ -215,7 +230,7 @@
         minWidth: 200.0,
         scale: 1.0,
         scaleMobile: 1.0,
-        showLines: false,
+        backgroundColor: "white",
       });
     </script>
   </body>
