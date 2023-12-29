@@ -1,0 +1,245 @@
+@import url("https://fonts.googleapis.com/css2?family=Pixelify+Sans&family=Roboto:wght@100;300;700&display=swap");
+
+body {
+  font-family: "Roboto", sans-serif;
+  padding: 0;
+  margin: 0;
+}
+
+.gradientAnimation {
+  background: linear-gradient(270deg, #00bb0c, #178a00);
+  background-size: 400% 400%;
+
+  -webkit-animation: AnimationName 6s ease infinite;
+  -moz-animation: AnimationName 6s ease infinite;
+  -o-animation: AnimationName 6s ease infinite;
+  animation: AnimationName 6s ease infinite;
+}
+
+@-webkit-keyframes AnimationName {
+  0% {
+    background-position: 0% 51%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 51%;
+  }
+}
+@-moz-keyframes AnimationName {
+  0% {
+    background-position: 0% 51%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 51%;
+  }
+}
+@-o-keyframes AnimationName {
+  0% {
+    background-position: 0% 51%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 51%;
+  }
+}
+@keyframes AnimationName {
+  0% {
+    background-position: 0% 51%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 51%;
+  }
+}
+
+img {
+  width: 100%;
+}
+.hero {
+  max-width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  overflow: hidden;
+}
+.hero__desc {
+  font-size: 25px;
+}
+.hero__card {
+  width: 40vw;
+  min-width: 400px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.hero__title {
+  font-size: 50px;
+  margin: 0px;
+  font-style: normal;
+}
+a {
+  text-decoration: none;
+}
+.hero__bg {
+  width: 100vw;
+  max-width: 100%;
+  height: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: -1;
+  filter: opacity(0.2);
+}
+.hero__img {
+  max-width: 300px;
+}
+
+.githubLink {
+  background-image: url("github-icon.svg");
+  background-position: center;
+  background-size: contain;
+  filter: contrast(0);
+  width: 60px;
+  height: 60px;
+  cursor: pointer;
+  display: block;
+  position: fixed;
+  top: 10px;
+  right: 10px;
+}
+.btn {
+  width: 100%;
+  max-width: 300px;
+  padding: 5px 0px;
+  margin: 10px 0;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  font-family: "Pixelify Sans", sans-serif;
+  color: black;
+  border: 5px solid black;
+  background-color: white;
+  font-weight: bold;
+  font-size: 40px;
+  border-radius: 50px;
+  position: relative;
+  overflow: hidden;
+  border-style: dashed;
+}
+.btn__spacer {
+  flex-grow: 1;
+}
+.btn:hover {
+  background-color: black;
+  color: white;
+}
+.btn--brightOnHover:hover {
+  filter: brightness(1.2);
+}
+.btn--green {
+  background-color: var(--green);
+}
+
+:root {
+  --invader-size: 30px;
+}
+
+.spaceInvader {
+  display: inline-block;
+  position: relative;
+}
+.spaceInvader__character {
+  position: absolute;
+  animation: spaceInvader 6s linear infinite;
+  height: var(--invader-size);
+  width: var(--invader-size);
+}
+.spaceInvader__svg {
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  left: 0;
+  width: var(--invader-size);
+  height: var(--invader-size);
+}
+.spaceInvader__bullet {
+  width: 5px;
+  height: 8px;
+  position: absolute;
+  background-color: black;
+  animation: fireBullet 2.5s linear infinite;
+  right: 0;
+  left: 0;
+  margin: 0 auto;
+}
+@keyframes fireBullet {
+  0% {
+    top: 100%;
+    opacity: 0%;
+  }
+  70% {
+    top: -100px;
+    opacity: 100%;
+  }
+  100% {
+    top: -100px;
+  }
+}
+@keyframes spaceInvader {
+  0% {
+    left: 0%;
+  }
+  50% {
+    left: calc(100% - var(--invader-size));
+  }
+  100% {
+    left: 0%;
+  }
+}
+@media screen and (max-width: 600px) {
+  .hero__card {
+    padding: 0;
+    border: 0px;
+    min-height: 60vh;
+  }
+  .hero {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+
+  .hero__desc {
+    font-size: 19px;
+  }
+  .hero__bg {
+    left: 0;
+  }
+  .btn {
+    font-size: 40px;
+    margin: 10px auto;
+  }
+  .hero__card {
+    max-width: unset;
+    min-width: unset;
+    width: unset;
+    text-align: center;
+    background-color: unset;
+    padding: 20px;
+    border-radius: 5px;
+  }
+}
