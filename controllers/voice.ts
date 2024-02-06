@@ -161,14 +161,13 @@ export const voiceController = async (req: Request, res: Response) => {
   if (process.env.RECORD == "true" && callStatus == "ringing") {
     logger.info(`Recording Call - ${req.body["Caller"]}`);
     setTimeout(() => {
-      try {
-        twilioClient
-          .calls(req.body["CallSid"])
-          .recordings.create({ recordingTrack: "dual" })
-          .then((recording) => logger.info(`Recording Started - ${req.body["caller"]} SID:${recording.sid}`));
-      } catch (err) {
-        logger.error("Failed to record call " + err);
-      }
+      twilioClient
+        .calls(req.body["CallSid"])
+        .recordings.create({ recordingTrack: "dual" })
+        .then((recording) => logger.info(`Recording Started - ${req.body["caller"]} SID:${recording.sid}`))
+        .catch((err) => {
+          logger.error("Failed to record call " + err);
+        });
     }, 3000);
   }
 };
